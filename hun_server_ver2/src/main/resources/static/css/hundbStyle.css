@@ -1,0 +1,233 @@
+@charset "UTF-8";
+
+html{ 
+    /* overflow: scroll;  */
+    -webkit-overflow-scrolling: touch;
+    overflow: visible;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width:100%; 
+    height:100%;
+}
+
+div a { 
+	text-decoration: none; 
+	color: black;
+}
+
+div a:hover {
+	text-decoration: none; 
+	color: black;
+}
+
+/* MusicList.jsp */
+#search_form button {
+	background-color: white;
+}
+
+#hard_button {
+	margin-right: 10px;
+}
+
+#easy_button {
+	background-color: #f08787; 
+	color: white;
+}
+
+#easy_button:hover {
+	background-color: #d68282; 
+}
+
+.before_list {
+	display: flex; 
+	justify-content: flex-end;
+}
+
+.countMusic {
+	font-size: 20px; 
+	margin-bottom: 10px;
+}
+
+.modal-header, .modal-body, .modal-footer {
+	background-color: #f3f7f9;
+}
+
+/* .countMusic, .before_list, .title, .navbar {
+	z-index: 0;
+} */
+
+.content {
+	z-index: 0;
+}
+
+.modal-content {
+  z-index: 2000 !important;
+}
+
+
+/* Responsive layout */
+@media (max-width: 600px) {
+	.before_list {
+  		display: flex; 
+		flex-direction: column;
+	}
+  
+	.musicAdd_button {
+  		margin-top: 15px;
+  	}
+}
+
+@media (max-width: 309px) {
+	#easy_button {
+		margin-top: 10px;
+	}
+}
+
+/* musicList.jsp, musicForm.jsp, musicComplexForm.jsp */
+.title {
+	padding-left: 80px; 
+}
+
+.content {
+	padding-left: 100px; 
+	padding-right: 100px;
+}
+
+@media (max-width: 550px) {
+	.title {
+		padding-left: 10px; 
+		padding-right: 30px;
+	}
+
+	.content {
+		padding-left: 30px; 
+		padding-right: 30px;
+	}
+}
+
+/* musicForm.jsp, musicComplexForm.jsp */
+.after_form {
+	margin-bottom: 20px;
+}
+
+@media (max-width: 340px) {
+	#submit_button {
+		margin-top: 10px;
+	}
+}
+
+/* main.jsp */
+.slideImg, .introductionImg {
+	width: 100%;
+}
+
+.introLogo {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	
+	display: flex;
+	justify-content: center;
+}
+
+.facebook, .map {
+	width: 40px;
+}
+
+.footer {
+	background-color: gray;
+	color: white;
+	text-align: center;
+	padding-top: 25px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.mainWrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.main {
+	flex: 1;
+}
+
+/* operation.jsp */
+.change {
+	background-color: #ffeeba;
+}
+
+#submit_button:hover, #submit_button:active {
+	cursor: pointer;
+}
+
+.time td:not(.except):hover {
+	cursor: pointer;
+}
+
+/* 사이드바 래퍼 스타일 */
+#page-wrapper {
+  padding-left: 250px;
+  position: relative; 
+  top: 50px;
+}
+
+#sidebar-wrapper {
+  position: fixed;
+  width: 220px;
+  height: 100%;
+  margin-left: -250px;
+  background: #000;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  padding: 20px;
+}
+ 
+/* 사이드바 스타일 */
+.sidebar-nav {
+  width: 250px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar-nav li {
+  text-indent: 1em;
+  line-height: 2.8em;
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #999;
+}
+
+.sidebar-nav li a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-nav > .sidebar-brand {
+  font-size: 1.3em;
+  line-height: 3em;
+}
+
+
+/* chooseMusic.jsp */
+.chooseMusicImg {
+	width:50px;
+}
+
+
+
+
+
+
