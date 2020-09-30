@@ -1,110 +1,84 @@
 package com.music.hun.service;
 
-import com.music.hun.model.music.Music;
 import com.music.hun.model.music.MusicCrawlingRequest;
-import com.music.hun.repository.MusicRepository;
+import com.music.hun.model.music.MusicRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class MusicCrawlingService {
-    @Autowired
-    private MusicRepository musicRepository;
 
-    private int crawlingHottracks(MusicCrawlingRequest musicCrawlingRequest) throws IOException {
+    private final String hottracksUrl = "https://www.hottracks.co.kr/ht/record/detail/";
+    private final String amazonUrl = "https://www.amazon.com/s?k=";
+
+    public Map<String, Object> crawling(MusicCrawlingRequest musicCrawlingRequest) throws IOException {
+        // result
+        Map<String, Object> crawlingResultMap = new HashMap<>();
+
+        // barcode
         String barcode = musicCrawlingRequest.getBarcode();
 
+        /* 교보문고 핫트랙스 크롤링 시도 */
         // 핫트랙스 페이지 URL
-        String url = "https://www.hottracks.co.kr/ht/record/detail/" + barcode;
+        String url = hottracksUrl + barcode;
 
         // 링크 대상 페이지에 접근
         Document doc = Jsoup.connect(url).userAgent("Jsoup Scraper").get();
 
         // 크롤링 전
-        String title = "";
         String artist = "";
         String track = "";
         String label = "";
-        String numOfDisc = "1";
 
         // 음반 title 구하기
-        title = doc.select(".tit.mgt30").text();
+        String title = doc.select(".tit.mgt30").text();
 
-        // 핫트랙스에 해당 음반일 없을 경우, 아마존 크롤링
+        /* 핫트랙스에 해당 음반 없을 경우, 아마존 크롤링 */
         if(title.equals("")) {
-            crawlingAmazon(musicCrawlingRequest);
+            crawlingResultMap.put("crawlingSite", "Amazon");
+            crawlingResultMap.put("crawlingResult", crawlingAmazon(musicCrawlingRequest));
+            return crawlingResultMap;
         }
         else {
-            /* artist, composer, track, label, numOfDisc 값 추출하여 저장 */
+            /* artist, track, label, numOfDisc 값 추출하여 저장 */
             // artist, label
             Elements NodeList = doc.select(".cover li");
 
             for (Element value : NodeList) {
                 String innerText = value.text();
+                String foundArtist = "";
 
-                if (innerText.contains("연주자 :")) {
-                    artist = innerText.substring(6).replace("-", " ");
+                if (innerText.contains("연주자 :") || innerText.contains("지휘자 :")) {
+                    foundArtist = innerText.substring(6).replace("-", " ");
+                } else if (innerText.contains("오케스트라 :")) {
+                    foundArtist = innerText.substring(8).replace("-", " ");
+                } else if (innerText.contains("레이블 :")) {
+                    label = innerText.substring(6);
+                }
 
+                if (!foundArtist.equals("")) {
                     //artist 첫글자만 대문자 처리
-                    String[] arr = artist.trim().split(" ");
+                    String[] arr = foundArtist.trim().split(" ");
                     StringBuffer sb = new StringBuffer();
 
                     for (String s : arr) {
                         sb.append(Character.toUpperCase(s.charAt(0)))
-                                .append(s.substring(1).toLowerCase())
-                                .append(" ");
+                          .append(s.substring(1).toLowerCase())
+                          .append(" ");
                     }
 
-                    artist = sb.toString().trim().replace(", ", "\n");
+                    artist += sb.toString().trim().replace(", ", "\n");
                     artist += "\n";
-                } else if (innerText.contains("지휘자 :")) {
-                    String conductor = innerText.substring(6).replace("-", " ");
-
-                    //conductor 첫글자만 대문자 처리
-                    String[] arr = conductor.trim().split(" ");
-                    StringBuffer sb = new StringBuffer();
-
-                    for (int j = 0; j < arr.length; j++) {
-                        sb.append(Character.toUpperCase(arr[j].charAt(0)))
-                                .append(arr[j].substring(1).toLowerCase())
-                                .append(" ");
-                    }
-
-                    conductor = sb.toString().trim().replace(", ", "\n");
-
-                    //artist에 붙여주기
-                    artist += conductor;
-                    artist += "\n";
-                } else if (innerText.contains("오케스트라 :")) {
-                    String orchestra = innerText.substring(8).replace("-", " ");
-
-                    //orchestra 첫글자만 대문자 처리
-                    String[] arr = orchestra.trim().split(" ");
-                    StringBuffer sb = new StringBuffer();
-
-                    for (int j = 0; j < arr.length; j++) {
-                        sb.append(Character.toUpperCase(arr[j].charAt(0)))
-                                .append(arr[j].substring(1).toLowerCase())
-                                .append(" ");
-                    }
-
-                    orchestra = sb.toString().trim().replace(", ", "\n");
-
-                    //artist에 붙여주기
-                    artist += orchestra;
-                    artist += "\n";
-                } else if (innerText.contains("레이블 :")) {
-                    label = innerText.substring(6);
                 }
             }
 
@@ -135,43 +109,50 @@ public class MusicCrawlingService {
             Elements NodeList2 = doc.select(".album_option li");
 
             String raw_numOfDisc = NodeList2.get(7).text();
-            numOfDisc = raw_numOfDisc.substring(8, 9); //디스크 수 : 4 DISC | 에서 4 추출
+            String numOfDisc = raw_numOfDisc.substring(8, 9); //디스크 수 : 4 DISC | 에서 4 추출
 
-            // save to DB
-            Music music = Music.builder()
+            MusicRequest musicRequest = MusicRequest.builder()
                     .barcode(barcode)
                     .title(title)
                     .artist(artist)
-                    .composer(musicCrawlingRequest.getComposer())
+                    .composerFromInput(musicCrawlingRequest.getComposerFromInput())
+                    .composerFromSelect(musicCrawlingRequest.getComposerFromSelect())
                     .category(musicCrawlingRequest.getCategory())
                     .track(track)
                     .label(label)
                     .numOfDisc(numOfDisc)
                     .importance(musicCrawlingRequest.getImportance())
-                    .registeredAt(LocalDateTime.now())
                     .build();
-            save(music);
-            return 0;
+
+            crawlingResultMap.put("crawlingSite", "Hottracks");
+            crawlingResultMap.put("crawlingResult", musicRequest);
+            return crawlingResultMap;
         }
-        return 0;
     }
 
-    private void crawlingAmazon(MusicCrawlingRequest musicCrawlingRequest) throws IOException {
+    public MusicRequest crawlingAmazon(MusicCrawlingRequest musicCrawlingRequest) throws IOException {
         // 크롤링 전
-        String title = "";
+        String barcode = musicCrawlingRequest.getBarcode();
         String artist = "";
         String track = "";
         String label = "";
         String numOfDisc = "1";
+        String composer = "";
 
-        String barcode = musicCrawlingRequest.getBarcode();
-        String composer = musicCrawlingRequest.getComposer();
+        // composer 초기 처리
+        String composerFromSelect = musicCrawlingRequest.getComposerFromSelect();
+
+        if (composerFromSelect != null && !composerFromSelect.equals("기타")) {
+            composer += composerFromSelect;
+        }
+
+        composer += musicCrawlingRequest.getComposerFromInput();
 
         //아마존 페이지 url 가져오기
-        String amazonUrl = "https://www.amazon.com/s?k=" + barcode;
+        String url = amazonUrl + barcode;
 
         // 링크 대상 페이지에 접근 - GET 요청을 보내 Document 객체를 변수 doc에 저장하기
-        Document amazonDoc = Jsoup.connect(amazonUrl).userAgent("Jsoup Scraper").get();
+        Document amazonDoc = Jsoup.connect(url).userAgent("Jsoup Scraper").get();
 
         // CSS 선택자를 사용해 링크 추출
         Elements titleLine = amazonDoc.select(".a-link-normal.a-text-normal");
@@ -181,15 +162,17 @@ public class MusicCrawlingService {
         nextUrl = titleLine.attr("abs:href");
 
         if(nextUrl.equals("")) { // 판매하지 않는 음반일 경우
-            recordNotOnSaleMessage();
-        }
-        else {
+            return null;
+        } else {
             // 링크 대상 페이지에 접근하기
             Document nextDoc = Jsoup.connect(nextUrl).userAgent("Jsoup Scraper").get();
 
             /* title, artist, composer, track, label, numOfDisc 값 추출하여 저장하기 */
             // title
-            title = nextDoc.select("#productTitle").text();
+            String title = nextDoc.select("#productTitle").text();
+            if (title == null) {
+                title = "";
+            }
 
             // artist, 전처리
             Elements artists = nextDoc.select(".author > .a-link-normal");
@@ -216,30 +199,26 @@ public class MusicCrawlingService {
                         "stravinsky", "tchaikovsky", "telemann", "verdi", "vivaldi", "wagner", "weber"
                 };
 
-                if(Arrays.stream(composerList).anyMatch(artistLow::equals)) // artist 가 작곡가일 경우
-                {
+                if(Arrays.stream(composerList).anyMatch(artistLow::equals)) { // artist 가 작곡가일 경우
                     String composerLow = composer.toLowerCase();
-                    String artistLastname = artistRaw.substring(artistRaw.lastIndexOf(" ")+1); //마지막 문자열만 가져오기(이름의 성만 가져오기)
+                    String artistLastname = artistRaw.substring(artistRaw.lastIndexOf(" ") + 1); //마지막 문자열만 가져오기(이름의 성만 가져오기)
 
-                    if(!composerLow.contains(artistLastname.toLowerCase()))
-                    {
+                    if(!composerLow.contains(artistLastname.toLowerCase())) {
                         composer += "\n";
                         composer += artistLastname.substring(0, 1).toUpperCase() + artistLastname.substring(1).toLowerCase(); //첫 글자만 대문자화
                     }
-                }
-                else // aritst 가 작곡가가 아닐 경우
-                {
+                } else { // aritst 가 작곡가가 아닐 경우
                     // artist 첫글자만 대문자 처리
                     String[] arr = artistRaw.trim().split(" ");
                     StringBuffer sb = new StringBuffer();
 
-                    for (int j = 0; j < arr.length; j++) {
-                        sb.append(Character.toUpperCase(arr[j].charAt(0)))
-                                .append(arr[j].substring(1).toLowerCase())
+                    for (String word : arr) {
+                        sb.append(Character.toUpperCase(word.charAt(0)))
+                                .append(word.substring(1).toLowerCase())
                                 .append(" ");
                     }
 
-                    artist = sb.toString().trim();
+                    artist += sb.toString().trim();
                     artist += "\n";
                 }
             }
@@ -258,44 +237,28 @@ public class MusicCrawlingService {
             for (Element element : NodeList) {
                 String innerText = element.text();
 
-                if (innerText.contains("Number of Discs:")) {
+                if (innerText != null && innerText.contains("Number of Discs:")) {
                     numOfDisc = innerText.substring(17);
-                    System.out.println(numOfDisc);
                 }
 
-                if (innerText.contains("Label:")) {
+                if (innerText != null && innerText.contains("Label:")) {
                     label = innerText.substring(7);
-                    System.out.println(label);
                 }
             }
 
-            Music music = Music.builder()
+            MusicRequest musicRequest = MusicRequest.builder()
                     .barcode(barcode)
                     .title(title)
                     .artist(artist)
-                    .composer(composer)
+                    .composerFromInput(composer)
                     .category(musicCrawlingRequest.getCategory())
                     .track(track)
                     .label(label)
                     .numOfDisc(numOfDisc)
                     .importance(musicCrawlingRequest.getImportance())
-                    .registeredAt(LocalDateTime.now())
                     .build();
 
-            save(music);
+            return musicRequest;
         }
     }
-
-    private int save(Music music) {
-        Music newMusic = musicRepository.save(music);
-        // Todo: DB Save 결과
-        return 0;
-    }
-
-    private void recordNotOnSaleMessage() {
-//        PrintWriter out = response.getWriter();
-//        out.println("<script>alert('현재 판매되지 않는 음반으로, 곡을 직접 추가해야 합니다.'); location.href='"+context+"/MusicList';</script>");
-//        out.flush();
-    }
-
 }

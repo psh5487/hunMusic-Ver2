@@ -4,6 +4,7 @@ import com.music.hun.model.music.Music;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,11 +26,11 @@ public interface MusicRepository extends JpaRepository<Music, String> {
 
     /* 검색 */
     // 특정 keyword 를 포함하는 곡 찾기
-    List<Music> findAllIgnoreCaseContaining(String searchWord);
+//    List<Music> findMusicIgnoreCaseContaining(String searchWord);
 
     // 특정 keyword 를 포함하는 전체 곡 수
-
-    /* 선곡표 만들기 */
-    // 뽑힌 id 에 해당하는 곡 정보 가져오기
-
+    @Query(value = "SELECT count(*) FROM music "
+                 + "WHERE UPPER(title) LIKE ? OR UPPER(artist) LIKE ? OR UPPER(composer) LIKE ? OR UPPER(category) LIKE ? OR UPPER(track) LIKE ? OR UPPER(label) LIKE ?",
+            nativeQuery=true)
+    int countIncludingKeyword(String searchWord);
 }

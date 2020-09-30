@@ -86,7 +86,7 @@ div a:hover {
 	}
 }
 
-/* musicList.jsp, musicForm.jsp, musicComplexForm.jsp */
+/* musicList.jsp, musicAddSimpleForm.jsp, musicAddComplexForm.jsp */
 .title {
 	padding-left: 80px; 
 }
@@ -108,7 +108,7 @@ div a:hover {
 	}
 }
 
-/* musicForm.jsp, musicComplexForm.jsp */
+/* musicAddSimpleForm.jsp, musicAddComplexForm.jsp */
 .after_form {
 	margin-bottom: 20px;
 }

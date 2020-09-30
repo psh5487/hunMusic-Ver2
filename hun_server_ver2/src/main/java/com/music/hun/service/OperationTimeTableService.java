@@ -13,11 +13,11 @@ public class OperationTimeTableService {
     @Autowired
     private OperationTimeTableRepository operationTimeTableRepository;
 
-    /* 모든 운영 시간표 찾기 */
-    List<OperationTimeTable> operationTimeTables = operationTimeTableRepository.findAll();
-
     /* 운영 시간표 삽입 */
     public OperationTimeTable insertOperationTimeTable(TimeTableRequest timeTableRequest) {
+        /* 모든 운영 시간표 찾기 */
+        List<OperationTimeTable> operationTimeTables = operationTimeTableRepository.findAll();
+
         OperationTimeTable operationTimeTable = OperationTimeTable.builder()
                 .name(timeTableRequest.getName())
 

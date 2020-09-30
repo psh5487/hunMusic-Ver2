@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class MusicCrawlingRequest {
     private String barcode;
     private String category;
-    private String composer;
-    private int importance;
+    private String composerFromSelect;
+    private String composerFromInput;
+    private String importance;
 }

@@ -14,12 +14,11 @@ public class MusicRequest {
     private String barcode;
     private String title;
     private String artist;
-    private String composer;
+    private String composerFromSelect;
+    private String composerFromInput;
     private String category;
-
     private String track;
     private String label;
     private String numOfDisc;
-
-    private int importance;
+    private String importance;
 }
