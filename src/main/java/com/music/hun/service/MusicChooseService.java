@@ -32,7 +32,7 @@ public class MusicChooseService {
         }
 
         // 랜덤하게 15개 뽑기
-        int randomIdxArr[] = new int[15];
+        int[] randomIdxArr = new int[15];
         Random r = new Random();
 
         for(int i = 0; i < 15; i++) {

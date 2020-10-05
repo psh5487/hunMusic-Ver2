@@ -61,10 +61,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
           // JWTAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 전에 넣기
           .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                   UsernamePasswordAuthenticationFilter.class);
-
     }
-
-
-
 
 }

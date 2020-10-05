@@ -33,6 +33,11 @@
                 <a class="nav-link" href="<%=request.getContextPath()%>/operationTable">개인시간표 입력</a>
             </li>
         </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/logInForm">LogIn</a>
+            </li>
+        </ul>
     </div>
 </nav>
 </body>

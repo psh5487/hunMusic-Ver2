@@ -21,20 +21,16 @@ import java.time.LocalDateTime;
 @Entity
 public class Music {
     @Id
-    private String barcode;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String barcode;
     private String title;
     private String artist;
     private String composer;
     private String category;
-
     private String track;
     private String label;
     private String numOfDisc;
-
     private int importance;
-
     private LocalDateTime registeredAt;
 }

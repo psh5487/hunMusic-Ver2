@@ -1,4 +1,4 @@
-package com.music.hun.controller.community;
+package com.music.hun.controller.user;
 
 public class AuthenticationRestController {
 }

@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="../navbar.jsp"></c:import>
 <br><br>
 
 <div class="container">

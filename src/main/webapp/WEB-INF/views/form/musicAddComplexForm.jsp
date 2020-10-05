@@ -22,7 +22,7 @@
 </head>
 
 <body>
-<c:import url="navbar.jsp"></c:import>
+<c:import url="../navbar.jsp"></c:import>
 <br><br>
 
 <div class="title">
@@ -35,7 +35,7 @@
 <div class="content">
 <form name="music_form" method="POST" action="addMusicDirectly" accept-charset="utf-8">
 	<br><h5>바코드 넘버 (필수)</h5>
-	<input type = "text" name = "barcode" maxlength="20" id = "input_barcode" class="form-control" placeholder="숫자로만 입력" required pattern="\d*" title="숫자로만 입력하세요."/><br><br>
+	<input type="text" name="barcode" maxlength="20" id="input_barcode" class="form-control" placeholder="숫자로만 입력" required pattern="\d*" title="숫자로만 입력하세요."/><br><br>
 	
 	<h5>장르 (필수)</h5>
 	<select name="category" class="form-control" required>
@@ -50,7 +50,7 @@
 	<br><br>
 	
 	<h5>제목 (필수)</h5>
-	<input type = "text" name = "title" class="form-control" required/><br><br>
+	<input type="text" name="title" class="form-control" required/><br><br>
 	
 	<h5>아티스트 (필수)</h5>
 	<textarea rows="1" name="artist" id="artist" class="form-control" placeholder="예) Evgeny Kissin, Seong Jin Cho" required></textarea><br><br>
@@ -59,10 +59,10 @@
 	<textarea rows="10" name="track" id="track" class="form-control"></textarea><br><br>
 	
 	<h5>음반사</h5>
-	<input type = "text" name = "label" class="form-control"/><br><br>
+	<input type="text" name="label" class="form-control"/><br><br>
 	
 	<h5>디스크 수</h5>
-	<input type = "text" name = "numOfDisc" class="form-control" placeholder="숫자로만 입력" pattern="\d*" title="숫자로만 입력하세요."/><br><br>
+	<input type="text" name="numOfDisc" class="form-control" placeholder="숫자로만 입력" pattern="\d*" title="숫자로만 입력하세요."/><br><br>
 	
 	<h5>작곡가</h5>
 	<select name="composerFromSelect" class="form-control">

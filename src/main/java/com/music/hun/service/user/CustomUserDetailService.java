@@ -1,4 +1,4 @@
-package com.music.hun.service;
+package com.music.hun.service.user;
 
 import com.music.hun.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;

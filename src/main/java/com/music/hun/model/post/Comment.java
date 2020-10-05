@@ -19,7 +19,7 @@ public class Comment {
     private Long id;
 
     @Setter
-    private String content;
+    private String contents;
 
     private LocalDateTime registeredAt;
 

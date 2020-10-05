@@ -44,19 +44,21 @@ public class MusicController {
     /* 음반 작성 Form */
     @GetMapping("/addMusicDirectly")
     public String addMusicDirectlyForm() {
-        return "musicAddComplexForm";
+
+        return "form/musicAddComplexForm";
     }
 
     @GetMapping("/addMusicSimply")
     public String addMusicSimplyForm() {
-        return "musicAddSimpleForm";
+
+        return "form/musicAddSimpleForm";
     }
 
     @GetMapping("/updateMusic")
     public String updateMusicForm(@RequestParam("barcode") String barcode, Model model) {
         Music music = musicService.findMusicByBarcode(barcode);
         model.addAttribute("music", music);
-        return "musicUpdateForm";
+        return "form/musicUpdateForm";
     }
 
     /* 음반 직접 추가 */

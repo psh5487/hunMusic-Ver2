@@ -11,14 +11,7 @@ import java.util.List;
 public class MainController {
 
     @GetMapping("/")
-    public String mainPage(Model model) {
-        model.addAttribute("name", "sohyun");
-
-        List<String> fruits = new ArrayList<>();
-        fruits.add("apple");
-        fruits.add("banana");
-
-        model.addAttribute("list", fruits);
+    public String mainPage() {
         return "main";
     }
 }
