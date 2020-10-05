@@ -1,4 +1,4 @@
-package com.music.hun.service;
+package com.music.hun.service.music;
 
 import com.music.hun.model.music.Music;
 import com.music.hun.repository.MusicRepository;

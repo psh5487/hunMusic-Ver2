@@ -1,12 +1,11 @@
 package com.music.hun.model.user;
 
+import com.music.hun.model.userActivity.Comment;
+import com.music.hun.model.userActivity.Likes;
 import lombok.*;
-import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,15 +16,14 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 
+@Entity
+@Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Builder
-@Entity
+@EqualsAndHashCode
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +35,12 @@ public class User implements UserDetails {
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30, nullable = false)
+    private String profileImgUrl;
+
+    @Column(length = 100, nullable = false)
     private String password;
+
+    private LocalDateTime registeredAt;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -75,52 +77,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-//    private final Long id;
-//    private final String name;
-//    private final Email email;
-//    private String password;
-//
-//    private String profileImageUrl;
-//    private int loginCount;
-//    private LocalDateTime lastLoginAt;
-//    private final LocalDateTime createAt;
-//
-//    public User(String name, Email email, String password) {
-//        this(name, email, password, null);
-//    }
-//
-//    public User(String name, Email email, String password, String profileImageUrl) {
-//        this(null, name, email, password, profileImageUrl, 0, null, null);
-//    }
-//
-//    public User(Long id, String name, Email email, String password, String profileImageUrl,
-//                int loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
-//        checkArgument(isNotEmpty(name), "name must be provided.");
-//        checkArgument(
-//                name.length() >= 1 && name.length() <= 10,
-//                "name length must be between 1 and 10 characters."
-//        );
-//        checkNotNull(email, "email must be provided.");
-//        checkNotNull(password, "password must be provided.");
-//        checkArgument(
-//                profileImageUrl == null || profileImageUrl.length() <= 255,
-//                "profileImageUrl length must be less than 255 characters."
-//        );
-//
-//        this.id = id;
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-//        this.profileImageUrl = profileImageUrl;
-//        this.loginCount = loginCount;
-//        this.lastLoginAt = lastLoginAt;
-//        this.createAt = defaultIfNull(createAt, LocalDateTime.now());
-//    }
-//
-//    public void login(PasswordEncoder passwordEncoder, String credentials) {
-//
-//    }
 
 }

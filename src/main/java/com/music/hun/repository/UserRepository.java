@@ -1,4 +1,4 @@
-package com.music.hun.repository.user;
+package com.music.hun.repository;
 
 import com.music.hun.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

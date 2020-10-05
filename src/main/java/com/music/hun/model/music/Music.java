@@ -1,24 +1,20 @@
 package com.music.hun.model.music;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.music.hun.model.userActivity.Comment;
+import com.music.hun.model.userActivity.Likes;
+import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.context.annotation.Primary;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Entity
 public class Music {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

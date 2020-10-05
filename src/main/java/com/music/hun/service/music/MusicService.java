@@ -1,9 +1,10 @@
-package com.music.hun.service;
+package com.music.hun.service.music;
 
 import com.music.hun.model.music.Music;
 import com.music.hun.model.music.MusicCrawlingRequest;
 import com.music.hun.model.music.MusicRequest;
 import com.music.hun.repository.MusicRepository;
+import com.music.hun.service.music.MusicCrawlingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class MusicService {

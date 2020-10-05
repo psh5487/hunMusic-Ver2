@@ -1,11 +1,9 @@
 package com.music.hun.service.user;
 
-import com.music.hun.model.music.Music;
 import com.music.hun.model.user.User;
-import com.music.hun.repository.user.UserRepository;
+import com.music.hun.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,6 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @RequiredArgsConstructor

@@ -48,6 +48,9 @@ dependencies {
 	runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
 	runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
 
+	// validation
+	compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
 	// Dev
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

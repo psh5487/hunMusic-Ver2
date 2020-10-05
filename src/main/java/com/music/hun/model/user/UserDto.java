@@ -3,6 +3,8 @@ package com.music.hun.model.user;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class UserDto {
@@ -12,5 +14,7 @@ public class UserDto {
 
     private String name;
 
-//    private String profileImgUrl;
+    private String profileImgUrl;
+
+    private List<String> roles;
 }

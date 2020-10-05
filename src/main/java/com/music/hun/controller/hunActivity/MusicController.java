@@ -1,9 +1,9 @@
-package com.music.hun.controller;
+package com.music.hun.controller.hunActivity;
 
 import com.music.hun.model.music.Music;
 import com.music.hun.model.music.MusicCrawlingRequest;
 import com.music.hun.model.music.MusicRequest;
-import com.music.hun.service.MusicService;
+import com.music.hun.service.music.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;

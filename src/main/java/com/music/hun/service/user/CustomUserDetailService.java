@@ -1,6 +1,6 @@
 package com.music.hun.service.user;
 
-import com.music.hun.repository.user.UserRepository;
+import com.music.hun.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

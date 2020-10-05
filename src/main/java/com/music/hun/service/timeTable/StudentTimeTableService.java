@@ -1,4 +1,4 @@
-package com.music.hun.service;
+package com.music.hun.service.timeTable;
 
 import com.music.hun.model.timeTable.StudentTimeTable;
 import com.music.hun.model.timeTable.TimeTableRequest;

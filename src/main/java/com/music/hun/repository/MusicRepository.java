@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MusicRepository extends JpaRepository<Music, String> {
+public interface MusicRepository extends JpaRepository<Music, Long> {
     /* Common */
     // 모든 곡 찾기
     List<Music> findAll();
