@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
 @Entity
 @Builder
 @Getter
@@ -29,14 +28,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(length = 50, nullable = false)
     private String name;
 
     @Column(length = 50, nullable = false, unique = true)
     private String email;
 
+    @Setter
     private String profileImgUrl;
 
+    @Setter
     @Column(length = 100, nullable = false)
     private String password;
 

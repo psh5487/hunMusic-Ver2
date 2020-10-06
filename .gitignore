@@ -33,4 +33,4 @@ out/
 .vscode/
 
 ### security
-application.properties
+application.yml

@@ -16,8 +16,8 @@ import java.util.Map;
 
 import static com.music.hun.controller.network.ApiResult.ERROR;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class UserRestController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;

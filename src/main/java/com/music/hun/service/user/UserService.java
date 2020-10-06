@@ -42,6 +42,21 @@ public class UserService {
         return 0;
     }
 
+    /* 프로필 이미지 등록 */
+    public User registerProfile(Long userId, String imgPath) {
+
+        Optional<User> savedUser = userRepository.findById(userId);
+
+        if (!savedUser.isPresent()) {
+            return null;
+        }
+
+        User user = savedUser.get();
+        user.setProfileImgUrl(imgPath);
+
+        return userRepository.save(user);
+    }
+
     /* 이메일로 회원 정보 찾기 */
     public Optional<User> findMemberByEmail(String email) {
         return userRepository.findByEmail(email);
