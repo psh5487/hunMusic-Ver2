@@ -16,19 +16,14 @@ public class MusicChooseService {
     private MusicRepository musicRepository;
 
     /* 한 주의 선곡표 만들기 */
-    public List<Music> chooseOneWeekMusics(String choosedMusicTableName) {
+    public List<Music> chooseThisWeekMusics() {
 
         List<Music> allMusics = musicRepository.findAll();
         int listLength = allMusics.size();
 
         // 음반 list 가 충분하지 않을 때
-        if (listLength < 15)
-        {
-//            String context = request.getContextPath();
-//
-//            PrintWriter out = response.getWriter();
-//            out.println("<script>alert('곡을 15개 이상 입력하세요!'); location.href='"+context+"/MusicList';</script>");
-//            out.flush();
+        if (listLength < 15) {
+            return null;
         }
 
         // 랜덤하게 15개 뽑기
@@ -36,7 +31,7 @@ public class MusicChooseService {
         Random r = new Random();
 
         for(int i = 0; i < 15; i++) {
-            randomIdxArr[i] = r.nextInt(listLength) + 1;
+            randomIdxArr[i] = r.nextInt(listLength);
 
             for(int j = 0; j < i; j++) {
                 if(randomIdxArr[i] == randomIdxArr[j]) {
@@ -45,13 +40,12 @@ public class MusicChooseService {
             }
         }
 
-        // 뽑은 음악 넣기
-        List<Music> choosedMusics = new ArrayList<>();
+        // 뽑힌 음악 넣기
+        List<Music> thisWeekMusics = new ArrayList<>();
 
         for(int idx : randomIdxArr) {
-            choosedMusics.add(allMusics.get(idx));
+            thisWeekMusics.add(allMusics.get(idx));
         }
-
-        return choosedMusics;
+        return thisWeekMusics;
     }
 }

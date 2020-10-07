@@ -21,10 +21,10 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/MusicList?page=0&size=10&sort=registeredAt,desc">음반 리스트</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/MusicList">음반 리스트</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/chooseMusic">선곡표 만들기</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/thisWeekMusic">선곡표 만들기</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표</a>

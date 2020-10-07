@@ -69,7 +69,7 @@
 	<input type = "radio" name = "importance" value = "1" <c:if test="${music.importance == 1}">checked="checked"</c:if>/>&nbsp;하<br><br><br>
 	
 	<p class="text-muted">제출 후, 결과창이 뜰 때까지 기다리세요 :)</p>
-	<a href="<%=request.getContextPath()%>/MusicList?page=0&size=10&sort=registeredAt,desc" class="btn btn-outline-info"> ← 이전 </a> &ensp;
+	<a href="<%=request.getContextPath()%>/MusicList" class="btn btn-outline-info"> ← 이전 </a> &ensp;
 	<input type = "submit" value = "제출하기" id = "submit_button" class="btn btn-info"/>
 </form>
 <br><br>

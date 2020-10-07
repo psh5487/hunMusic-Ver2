@@ -130,7 +130,7 @@
 	
 	<p class="text-muted">제출 후, 결과창이 뜰 때까지 기다리세요 :)</p>
 	<div class="after_form">
-		<a href="<%=request.getContextPath()%>/MusicList?page=0&size=10&sort=registeredAt,desc" class="btn btn-outline-info"> ← 이전 </a> &ensp;
+		<a href="<%=request.getContextPath()%>/MusicList" class="btn btn-outline-info"> ← 이전 </a> &ensp;
 		<input type = "reset" value = "내용지우기" class="btn btn-outline-info"/>&ensp;
 		<input type = "submit" value = "제출하기" id = "submit_button" class="btn btn-info"/>
 	</div>

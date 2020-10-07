@@ -3,9 +3,12 @@ package com.music.hun.controller.hunActivity;
 import com.music.hun.model.music.Music;
 import com.music.hun.model.music.MusicCrawlingRequest;
 import com.music.hun.model.music.MusicRequest;
+import com.music.hun.service.music.MusicChooseService;
 import com.music.hun.service.music.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +26,13 @@ public class MusicController {
     @Autowired
     MusicService musicService;
 
+    @Autowired
+    MusicChooseService musicChooseService;
+
     /* 음반 리스트 */
     @GetMapping("/MusicList") // GET /MusicList?page=1&size=10&sort=registeredAt,desc
-    public String musicList(Pageable pageable, Model model) {
+    public String musicList(@PageableDefault(sort="registeredAt", direction = Sort.Direction.DESC) Pageable pageable,
+                            Model model) {
 
         List<Music> musicList = musicService.findMusicsWithSize(pageable);
         Map<String, Integer> pageInfoMap = musicService.paginationInfo(pageable);
@@ -61,11 +68,18 @@ public class MusicController {
         return "form/musicUpdateForm";
     }
 
+    /* 이번 주 감상곡 표 페이지 */
+    @GetMapping("/thisWeekMusic")
+    public String thisWeekMusic() {
+        return "thisWeekMusic";
+    }
+
     /* 음반 직접 추가 */
     @PostMapping("/addMusicDirectly")
-    public void addMusicDirectly(@ModelAttribute MusicRequest musicRequest, HttpServletResponse response) throws IOException {
+    public String addMusicDirectly(@ModelAttribute MusicRequest musicRequest, Model model) {
         int result = musicService.insertMusic(musicRequest, "insert");
         String message = "";
+        String url = "/MusicList";
 
         if (result == 0) {
             message = "저장되었습니다!";
@@ -73,18 +87,22 @@ public class MusicController {
             message = "이미 저장된 음반입니다!";
         } else if (result == -2) {
             message = "필수 값을 입력하세요!";
+            url = "/addMusicDirectly";
         }
 
         // Alert 메시지 후, 리다이랙트
-        alert(message, result, response);
+        model.addAttribute("message", message);
+        model.addAttribute("url", url);
+        return "redirect";
     }
 
     /* 음반 간편 추가 */
     @PostMapping("/addMusicSimply")
-    public void addMusicSimply(@ModelAttribute MusicCrawlingRequest musicCrawlingRequest,
-                               HttpServletResponse response) throws IOException {
+    public String addMusicSimply(@ModelAttribute MusicCrawlingRequest musicCrawlingRequest,
+                                 Model model) throws IOException {
         int result = musicService.insetMusicSimply(musicCrawlingRequest);
         String message = "";
+        String url = "/MusicList";
 
         if (result == 0) {
             message = "저장되었습니다!";
@@ -97,53 +115,59 @@ public class MusicController {
         }
 
         // Alert 메시지 후, 리다이랙트
-        alert(message, result, response);
+        model.addAttribute("message", message);
+        model.addAttribute("url", url);
+        return "redirect";
     }
 
     /* 음반 수정 */
     @PostMapping("/updateMusic")
-    public void updateMusic(@ModelAttribute MusicRequest musicRequest, HttpServletResponse response) throws IOException {
+    public String updateMusic(@ModelAttribute MusicRequest musicRequest, Model model) {
         int result = musicService.updateMusic(musicRequest);
         String message = "";
+        String url = "/MusicList";
 
         if (result == 0) {
             message = "수정되었습니다!";
         } else if (result == -2) {
             message = "필수 값을 입력하세요!";
+            url = "/updateMusic";
         }
 
         // Alert 메시지 후, 리다이랙트
-        alert(message, result, response);
+        model.addAttribute("message", message);
+        model.addAttribute("url", url);
+        return "redirect";
     }
 
     /* 음반 삭제 */
     @PostMapping("/deleteMusic")
-    public void deleteMusic(@RequestParam("item_barcode") String barcode,
-                            HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String deleteMusic(@RequestParam("item_barcode") String barcode, Model model) {
         int result = musicService.deleteMusic(barcode);
 
-        if (result == 0) {
-            // alert 없이 페이지 이동(리다이랙트)
-            String context = request.getContextPath();
-            response.sendRedirect(context + "/MusicList?page=0&size=10&sort=registeredAt,desc");
-        } else if (result == -3) {
-            String message = "없는 음반입니다!";
-            alert(message, result, response);
+        if (result == -3) {
+            // Alert 메시지 후, 리다이랙트
+            model.addAttribute("message", "없는 음반입니다!");
+            model.addAttribute("url", "/MusicList");
         }
+
+        // 성공 시, alert 없이 리다이랙트
+        return "redirect:/MusicList";
     }
 
-    // Alert 메시지 후, 리다이랙트
-    void alert(String message, int result, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
+    /* 이번 주 감상곡 뽑기 */
+    @PostMapping("/chooseMusic")
+    public String chooseMusic(Model model) {
+        List<Music> thisWeekMusics = musicChooseService.chooseThisWeekMusics();
 
-        if (result == 0) { // 성공한 경우
-            String url = "http://localhost:8080/MusicList?page=0&size=10&sort=registeredAt,desc";
-            out.println("<script>alert('" + message + "'); location.href='" + url + "';</script>");
-        } else {
-            out.println("<script>alert('" + message + "'); history.go(-1);</script>");
+        if (thisWeekMusics == null) {
+            model.addAttribute("message", "곡을 15개 이상 입력하세요!");
+            model.addAttribute("url", "/thisWeekMusic");
+            return "redirect";
         }
-        out.flush();
-    }
 
+        model.addAttribute("choosedMusicAll", thisWeekMusics);
+        model.addAttribute("choosedMusicLength", 15);
+        return "thisWeekMusic";
+    }
 }
