@@ -24,63 +24,25 @@
 </head>
 
 <body>
-<!-- 네브바 -->
-<!-- <nav class="navbar fixed-top navbar-expand-md bg-dark navbar-dark"> -->
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <a class="navbar-brand" href="<%=request.getContextPath()%>/">음취헌</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/MusicList">음반 리스트</a>
-      </li>  
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/chooseMusic">선곡표 만들기</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표</a>
-      </li>  
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/operationTable">개인시간표 입력</a>
-      </li>  
-    </ul>
-  </div>  
-</nav>
+<c:import url="navbar.jsp"></c:import>
 
-<!-- <div id="page-wrapper"> -->
-	<!-- 사이드바  -->
-	<%-- <div id="sidebar-wrapper">
-	  <ul class="sidebar-nav">
-	    <!-- <li class="sidebar-brand" style="color:#999">운영시간표 짜기</li> --><br>
-	    <li><a href="<%=request.getContextPath()%>/operationTable">개인 시간표 입력</a></li>
-	    <li><a href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표 짜기 </a></li>
-	  </ul>
-	</div> --%>
- 	 
 	<div class="container">
 	  <br><br><h2>시간표 제출한 사람</h2><br>
 	  
-	  <c:forEach items="${classTimeTableAll}" var="item" begin="0" end="${classTimesLength}">
+	  <c:forEach items="${studentTimeTableAll}" var="item" begin="0" end="${studentTimeTablesLength}">
 	  	<span style="font-size: 15px">${item.name}</span>&ensp;
 	  </c:forEach><br><br>
 	  
 	  <br><h2>운영 시간표 이름</h2><br>
-	  <!-- <form name="operationTable_form" method="POST" action="MakingOperationTable" accept-charset="utf-8">
-		<input type = "text" name = "operationTable_name" required maxlength="50" id = "input_name" class="form-control"/><br> 
-	  	<input type="submit" value="운영 시간표 짜기" class="btn btn-info"/>
-	  </form><br><br> -->
-	  
-	  <form method="POST" action="MakingOperationTable" accept-charset="utf-8">
-	      <input type = "text" name = "operationTable_name" required maxlength="50" id = "input_name" class="form-control"/><br> 
-	      <input type="submit" value="운영시간표 짜기 (타임당 1명)" class="btn btn-info"/> &ensp;
-	      <input type="submit" formaction="MakingOperationTable2" value="운영시간표 짜기 (타임당 2명)" class="btn btn-info">
+	  <form method="POST" action="makeOperationTimeTable" accept-charset="utf-8">
+	      <input type="text" name="operationTimeTable_name" required maxlength="50" id = "input_name" class="form-control"/><br>
+	      <input type="submit" value="운영시간표 짜기" class="btn btn-info"/> &ensp;
+<%--	      <input type="submit" formaction="makeOperationTimeTable2" value="운영시간표 짜기 (타임당 2명)" class="btn btn-info">--%>
 	  </form>
 	
 	  <br><h2>운영 시간표</h2><br>
-	  <c:forEach items="${operationTableAll}" var="item" begin="0" end="${operationTablesLength}">
-		  <form name="trash_form" id="trash_form" method="POST" action="DeleteOperationTableServlet" accept-charset="utf-8" style="margin-bottom: 10px; ">
+	  <c:forEach items="${operationTimeTableAll}" var="item" begin="0" end="${operationTimeTablesLength}">
+		  <form name="trash_form" id="trash_form" method="POST" action="deleteOperationTimeTable" accept-charset="utf-8" style="margin-bottom: 10px; ">
 		  		<span style="font-size: 25px">${item.name}</span> &ensp;
 				<input type="image" src="img/remove.png" name ="trash" id="trashButton" width="21px" height="auto" />
 				<input type="hidden" name="item_id" value="${item.id}" />
@@ -145,7 +107,5 @@
 	  </c:forEach>
 	
 	</div><br>
-<!-- </div> -->
-
 </body>
 </html>

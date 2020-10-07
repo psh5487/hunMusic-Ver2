@@ -33,10 +33,14 @@ dependencies {
 	// Jsoup
 	compile 'org.jsoup:jsoup:1.13.1'
 
+	// Gson
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
 	// Modeling
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Checking
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	implementation("com.google.guava:guava:29.0-jre")
 

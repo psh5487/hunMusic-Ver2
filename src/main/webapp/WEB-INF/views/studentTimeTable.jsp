@@ -25,42 +25,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
-<body> 
-<!-- 네브바 -->
-<!-- <nav class="navbar fixed-top navbar-expand-md bg-dark navbar-dark"> -->
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <a class="navbar-brand" href="<%=request.getContextPath()%>/">음취헌</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/MusicList">음반 리스트</a>
-      </li> 
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/chooseMusic">선곡표 만들기</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표</a>
-      </li>  
-      <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/operationTable">개인시간표 입력</a>
-      </li>
-    </ul>
-  </div>  
-</nav>
+<body>
+<c:import url="navbar.jsp"></c:import>
 
-<!-- <div id="page-wrapper"> -->
-	<!-- 사이드바  -->
-	<%-- <div id="sidebar-wrapper">
-	  <ul class="sidebar-nav">
-	    <!-- <li class="sidebar-brand" style="color:#999">운영시간표 짜기</li> --><br>
-	    <li><a href="<%=request.getContextPath()%>/operationTable">개인 시간표 입력</a></li>
-	    <li><a href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표 짜기 </a></li>
-	  </ul>
-	</div> --%>
- 	 
 	<!-- 시간표 테이블  -->
 	<div class="container">
 	  <br><br><h2>개인 시간표 입력</h2><br>  
@@ -140,16 +107,15 @@
 	  <span id = "submit_button" class="btn btn-info">제출하기</span><br><br>
 	  
 	  <br><h2>시간표 제출한 사람</h2><br>
-	  <c:forEach items="${classTimeTableAll}" var="item" begin="0" end="${classTimesLength}">
-	  	<form name="trash_form" id="trash_form" method="POST" action="DeleteClassTimeServlet" accept-charset="utf-8">
+	  <c:forEach items="${studentTimeTableAll}" var="item" begin="0" end="${studentTimeTableLength}">
+	  	<form name="trash_form" id="trash_form" method="POST" action="deleteStudentTimeTable" accept-charset="utf-8">
 			<input type="image" src="img/remove.png" name ="trash" id="trashButton" width="21px" height="auto" />
 			<input type="hidden" name="item_id" value="${item.id}" />
 			&ensp;<span style="font-size: 20px">${item.name}</span>
 		</form>
 	  </c:forEach>
 	</div><br><br>
-<!-- </div> -->
 
 </body>
-	<script type="text/javascript" src="js/operationJS.js"></script>
+	<script type="text/javascript" src="js/studentTimeTable.js"></script>
 </html>

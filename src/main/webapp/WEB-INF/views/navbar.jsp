@@ -27,10 +27,10 @@
                 <a class="nav-link" href="<%=request.getContextPath()%>/thisWeekMusic">선곡표 만들기</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/MakingOperationTable">운영시간표</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/operationTimeTable">운영시간표</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/operationTable">개인시간표 입력</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/studentTimeTable">개인시간표 입력</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">

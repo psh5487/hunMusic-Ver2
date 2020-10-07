@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -50,4 +51,6 @@ public class StudentTimeTable {
     private String F3;
     private String F4;
     private String F5;
+
+    private LocalDateTime registeredAt;
 }
