@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OperationTimeTableService {
@@ -42,10 +39,8 @@ public class OperationTimeTableService {
         // 운영시간표 초기화 - ""는 아무도 할당 안됨 의미. 할당되면 학생 이름 들어감
         String[][] operationTable = new String[5][6];
 
-        for(int i = 0; i < operationTable.length; i++) {
-            for(int j = 0; j < operationTable[i].length; j++) {
-                operationTable[i][j] = "";
-            }
+        for (String[] strings : operationTable) {
+            Arrays.fill(strings, "");
         }
 
         // 학생 당 몇 타임씩 배정되었는지 알려주는 맵 - 학생 이름 : {"", 월요일 배정 시간, 화요일 배정 시간, ..., 금요일 배정 시간}
@@ -54,7 +49,7 @@ public class OperationTimeTableService {
         // 학생 시간표 리스트로 정리
         List<String[][]> studentTimeTablesList = new ArrayList<>();
 
-        for(StudentTimeTable stt : studentTimeTables) {
+        for (StudentTimeTable stt : studentTimeTables) {
             // 학생 이름
             String name = stt.getName();
 
@@ -74,19 +69,19 @@ public class OperationTimeTableService {
         }
 
         // 3타임 연속 되는 학생 찾기
-        for(String[][] possibleTime : studentTimeTablesList) {
+        for (String[][] possibleTime : studentTimeTablesList) {
 
             String name = possibleTime[0][0];
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 // 3타임짜리니까 주 1회만 배정되도록
-                if(count(stAssignMap.get(name), 0) <= 4) {
+                if (count(stAssignMap.get(name), 0) <= 4) {
                     break;
                 }
 
-                for(int j = 1; j <= 3; j++) {
+                for (int j = 1; j <= 3; j++) {
                     // 학생 3타임 연속으로 가능하고, 해당 시간에 아무도 배정되어있지 않을 경우
-                    if(possibleTime[i][j].equals("0") && possibleTime[i][j+1].equals("0") && possibleTime[i][j+2].equals("0")
+                    if (possibleTime[i][j].equals("0") && possibleTime[i][j+1].equals("0") && possibleTime[i][j+2].equals("0")
                             && operationTable[i][j].equals("") && operationTable[i][j+1].equals("") && operationTable[i][j+2].equals("")) {
                         operationTable[i][j] = name;
                         operationTable[i][j+1] = name;
@@ -100,21 +95,21 @@ public class OperationTimeTableService {
         }
 
         // 2타임 연속 되는 학생 찾기
-        for(String[][] possibleTime : studentTimeTablesList) {
+        for (String[][] possibleTime : studentTimeTablesList) {
             String name = possibleTime[0][0];
 
             // 아직 배정 안 받은 학생 대상
-            if(count(stAssignMap.get(name), 0) != 5)
+            if (count(stAssignMap.get(name), 0) != 5)
                 continue;
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 // 2타임짜리니까 주 1회만 배정되도록
-                if(count(stAssignMap.get(name), 0) <= 4) {
+                if (count(stAssignMap.get(name), 0) <= 4) {
                     break;
                 }
 
-                for(int j = 1; j <= 4; j++) {
-                    if(possibleTime[i][j].equals("0") && possibleTime[i][j+1].equals("0")
+                for (int j = 1; j <= 4; j++) {
+                    if (possibleTime[i][j].equals("0") && possibleTime[i][j+1].equals("0")
                             && operationTable[i][j].equals("") && operationTable[i][j+1].equals("")) {
                         operationTable[i][j] = name;
                         operationTable[i][j+1] = name;
@@ -127,21 +122,21 @@ public class OperationTimeTableService {
         }
 
         // 1타임 되는 학생 찾기
-        for(String[][] possibleTime : studentTimeTablesList) {
+        for (String[][] possibleTime : studentTimeTablesList) {
             String name = possibleTime[0][0];
 
             // 아직 배정 안 받은 학생 대상
-            if(count(stAssignMap.get(name), 0) != 5)
+            if (count(stAssignMap.get(name), 0) != 5)
                 continue;
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 // 1타임짜리니까 주 2회까지 배정될 수 있도록
-                if(count(stAssignMap.get(name), 0) <= 3) {
+                if (count(stAssignMap.get(name), 0) <= 3) {
                     break;
                 }
 
-                for(int j = 1; j <= 5; j++) {
-                    if(possibleTime[i][j].equals("0") && operationTable[i][j].equals("")) {
+                for (int j = 1; j <= 5; j++) {
+                    if (possibleTime[i][j].equals("0") && operationTable[i][j].equals("")) {
                         operationTable[i][j] = name;
 
                         stAssignMap.get(name)[i] += 1;
@@ -152,20 +147,20 @@ public class OperationTimeTableService {
         }
 
         // 2타임 연속인 사람 중에, 아직 아무도 배정 안 된 타임에 추가해서 넣기
-        for(String[][] possibleTime: studentTimeTablesList) {
+        for (String[][] possibleTime: studentTimeTablesList) {
             String name = possibleTime[0][0];
 
-            if(count(stAssignMap.get(name), 2) < 1)
+            if (count(stAssignMap.get(name), 2) < 1)
                 continue;
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
                 // 주 2회까지 배정될 수 있도록
-                if(count(stAssignMap.get(name), 0) <= 3) {
+                if (count(stAssignMap.get(name), 0) <= 3) {
                     break;
                 }
 
-                for(int j = 1; j <= 5; j++) {
-                    if(possibleTime[i][j].equals("0") && operationTable[i][j].equals("")) {
+                for (int j = 1; j <= 5; j++) {
+                    if (possibleTime[i][j].equals("0") && operationTable[i][j].equals("")) {
                         operationTable[i][j] = name;
 
                         stAssignMap.get(name)[i] += 1;
@@ -179,18 +174,18 @@ public class OperationTimeTableService {
         // 3타임 연속인 사람 찾고, 각 요일에서 시작 타임 알아내기
         List<String> threeTimeStudents = new ArrayList<>();
 
-        for(String key : stAssignMap.keySet()) {
+        for (String key : stAssignMap.keySet()) {
             int[] arr = stAssignMap.get(key);
-            if(count(arr, 3) >= 1)
+            if (count(arr, 3) >= 1)
                 threeTimeStudents.add(key);
         }
 
         List<int[]> startTimes = new ArrayList<>();
-        for(String threeTimeStudent: threeTimeStudents) {
+        for (String threeTimeStudent: threeTimeStudents) {
             loop:
-            for(int j = 1; j <= 5; j++) {
-                for(int i = 0; i < 5; i++) {
-                    if(operationTable[i][j].equals(threeTimeStudent)) {
+            for (int j = 1; j <= 5; j++) {
+                for (int i = 4; i >= 0; i--) {
+                    if (operationTable[i][j].equals(threeTimeStudent)) {
                         startTimes.add(new int[]{i, j});
                         break loop;
                     }
@@ -198,7 +193,7 @@ public class OperationTimeTableService {
             }
         }
 
-        for(String[][] possibleTime : studentTimeTablesList) {
+        for (String[][] possibleTime : studentTimeTablesList) {
             String name = possibleTime[0][0];
 
             // 아직 배정 안 받은 학생 대상
@@ -206,21 +201,28 @@ public class OperationTimeTableService {
                 continue;
 
             // 3타임의 앞, 뒤 시간 할당하기
-            for(int[] startTime : startTimes) {
+            for (int[] startTime : startTimes) {
                 // 주 2회까지 할당되도록
-                if(count(stAssignMap.get(name), 0) <= 3) {
+                if (count(stAssignMap.get(name), 0) <= 3) {
                     break;
                 }
 
                 int dayIdx = startTime[0];
-                int TimeIdx = startTime[1];
+                int timeIdx = startTime[1];
 
-                if(possibleTime[dayIdx][TimeIdx].equals("0")) {
-                    operationTable[dayIdx][TimeIdx] = name;
+                if (possibleTime[dayIdx][timeIdx].equals("0")) {
+
+                    stAssignMap.get(operationTable[dayIdx][timeIdx])[dayIdx] -= 1;
+
                     stAssignMap.get(name)[dayIdx] += 1;
-                } else if(possibleTime[dayIdx][TimeIdx + 2].equals("0")) {
-                    operationTable[dayIdx][TimeIdx + 2] = name;
+                    operationTable[dayIdx][timeIdx] = name;
+
+                } else if (possibleTime[dayIdx][timeIdx + 2].equals("0")) {
+
+                    stAssignMap.get(operationTable[dayIdx][timeIdx + 2])[dayIdx] -= 1;
+
                     stAssignMap.get(name)[dayIdx] += 1;
+                    operationTable[dayIdx][timeIdx + 2] = name;
                 }
             }
         }
@@ -229,18 +231,18 @@ public class OperationTimeTableService {
         // 2타임 연속인 사람 찾고, 각 요일에서 시작 타임 알아내기
         List<String> twoTimeStudents = new ArrayList<>();
 
-        for(String key : stAssignMap.keySet()) {
+        for (String key : stAssignMap.keySet()) {
             int[] arr = stAssignMap.get(key);
-            if(count(arr, 2) >= 1)
+            if (count(arr, 2) >= 1)
                 twoTimeStudents.add(key);
         }
 
         List<int[]> startTimes2 = new ArrayList<>();
-        for(String twoTimeStudent: twoTimeStudents) {
+        for (String twoTimeStudent: twoTimeStudents) {
             loop:
-            for(int j = 1; j <= 5; j++) {
-                for(int i = 0; i < 5; i++) {
-                    if(operationTable[i][j].equals(twoTimeStudent)) {
+            for (int i = 0; i < 5; i++) {
+                for (int j = 1; j <= 5; j++) {
+                    if (operationTable[i][j].equals(twoTimeStudent)) {
                         startTimes2.add(new int[]{i, j});
                         break loop;
                     }
@@ -248,7 +250,7 @@ public class OperationTimeTableService {
             }
         }
 
-        for(String[][] possibleTime : studentTimeTablesList) {
+        for (String[][] possibleTime : studentTimeTablesList) {
             String name = possibleTime[0][0];
 
             // 아직 배정 안 받은 학생 대상
@@ -256,25 +258,68 @@ public class OperationTimeTableService {
                 continue;
 
             // 2타임의 앞, 뒤 시간 할당하기
-            for(int[] startTime : startTimes2) {
+            for (int[] startTime : startTimes2) {
                 // 주 2회까지 할당되도록
-                if(count(stAssignMap.get(name), 0) <= 3) {
+                if (count(stAssignMap.get(name), 0) <= 3) {
                     break;
                 }
 
                 int dayIdx = startTime[0];
-                int TimeIdx = startTime[1];
+                int timeIdx = startTime[1];
 
-                if(possibleTime[dayIdx][TimeIdx].equals("0")) {
-                    operationTable[dayIdx][TimeIdx] = name;
+                String curStudent = operationTable[dayIdx][timeIdx];
+
+                if (possibleTime[dayIdx][timeIdx].equals("0")) {
+                    stAssignMap.get(curStudent)[dayIdx] -= 1;
+
+                    // 바꿔치기 당한 학생이 아무 자리도 할당 받지 못하는 것 방지
+                    if(count(stAssignMap.get(curStudent), 0) == 5) {
+                        stAssignMap.get(curStudent)[dayIdx] += 1;
+                        continue;
+                    }
+
                     stAssignMap.get(name)[dayIdx] += 1;
-                } else if(possibleTime[dayIdx][TimeIdx + 1].equals("0")) {
-                    operationTable[dayIdx][TimeIdx + 1] = name;
+                    operationTable[dayIdx][timeIdx] = name;
+
+                } else if (possibleTime[dayIdx][timeIdx + 1].equals("0")) {
+                    stAssignMap.get(curStudent)[dayIdx] -= 1;
+
+                    // 바꿔치기 당한 학생이 아무 자리도 할당 받지 못하는 것 방지
+                    if(count(stAssignMap.get(curStudent), 0) == 5) {
+                        stAssignMap.get(curStudent)[dayIdx] += 1;
+                        continue;
+                    }
+
                     stAssignMap.get(name)[dayIdx] += 1;
+                    operationTable[dayIdx][timeIdx + 1] = name;
                 }
             }
         }
 
+        /* 여전히 배정 못 받은 학생 추가로 배정하기 */
+        // 1타임 되는 학생 찾기
+        for (String[][] possibleTime : studentTimeTablesList) {
+            String name = possibleTime[0][0];
+
+            // 아직 배정 안 받은 학생 대상
+            if (count(stAssignMap.get(name), 0) != 5)
+                continue;
+
+            for (int i = 0; i < 5; i++) {
+                // 1타임짜리니까 주 2회까지 배정될 수 있도록
+                if (count(stAssignMap.get(name), 0) <= 3) {
+                    break;
+                }
+
+                for (int j = 1; j <= 5; j++) {
+                    if (possibleTime[i][j].equals("0") && operationTable[i][j].length() < 5) {
+                        operationTable[i][j] += " " + name;
+                        stAssignMap.get(name)[i] += 1;
+                        break;
+                    }
+                }
+            }
+        }
 
         OperationTimeTable operationTimeTable = OperationTimeTable.builder()
                 .name(operationTimeTableName)
@@ -320,12 +365,11 @@ public class OperationTimeTableService {
     private int count(int[] arr, int target) {
         int count = 0;
 
-        for(int element : arr) {
-            if(element == target) {
+        for (int element : arr) {
+            if (element == target) {
                 count++;
             }
         }
-
         return count;
     }
 
