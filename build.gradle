@@ -1,75 +1,104 @@
-plugins {
-	id 'org.springframework.boot' version '2.3.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'java'
-}
-
-group = 'com.music'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+buildscript {
+	ext {
+		springBootVersion = '2.3.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
 	}
 }
 
-repositories {
-	mavenCentral()
-}
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
 
-dependencies {
-	// Web
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	group = 'com.music'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
 
-	// DB
-	runtimeOnly 'mysql:mysql-connector-java'
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	repositories {
+		mavenCentral()
+	}
 
-	// Jsp, Jstl
-	compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	compile 'javax.servlet:jstl:1.2'
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
 
-	// Jsoup
-	compile 'org.jsoup:jsoup:1.13.1'
+	dependencies {
+		// Web
+		implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// Gson
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+		// DB
+		runtimeOnly 'mysql:mysql-connector-java'
+		compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	// Modeling
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+		// Jsp, Jstl
+		compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
+		compile 'javax.servlet:jstl:1.2'
 
-	// Checking
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-	implementation("com.google.guava:guava:29.0-jre")
+		// Jsoup
+		compile 'org.jsoup:jsoup:1.13.1'
 
-	// Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+		// Gson
+		compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
 
-	// Json Web Token
-	implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
-	runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
-	runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+		// Modeling
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
 
-	// AWS S3
-	compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.875'
+		// Checking
+		compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+		compile group: 'commons-io', name: 'commons-io', version: '2.6'
+		implementation("com.google.guava:guava:29.0-jre")
+
+		// Security
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+
+		// Json Web Token
+		implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+		runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
+		runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+
+		// AWS S3
+		compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.875'
 //	compile group: 'org.springframework.cloud', name: 'spring-cloud-aws', version: '2.2.1.RELEASE', ext: 'pom'
 
-	// validation
-	compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+		// Kafka
+		compile 'org.springframework.kafka:spring-kafka'
 
-	// Dev
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		// validation
+		compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
-	// Test
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		// Dev
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+		// Test
+		testImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+		testImplementation 'org.springframework.security:spring-security-test'
 	}
-	testImplementation 'org.springframework.security:spring-security-test'
+
+	test {
+		useJUnitPlatform()
+	}
 }
 
-test {
-	useJUnitPlatform()
+project(':hun-server-push') {
+	dependencies {
+		compile project(':hun-server-api')
+
+		// Web Push
+		compile group: 'nl.martijndwars', name: 'web-push', version: '5.0.2'
+		compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.60'
+	}
 }
+
+
