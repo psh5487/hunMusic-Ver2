@@ -13,22 +13,33 @@ https://hunmusic.herokuapp.com
 
 ## Ver.2 에서 달라진 점
 - Spring Boot 프레임워크 사용
+- MSA 전환을 위한 프로젝트 모듈 분리 
 - 기능 추가
 - 코드 개선
+
+## DB 스키마
+<img width="800" alt="아키텍쳐" src="https://user-images.githubusercontent.com/26567880/97251011-74bb2380-184a-11eb-90cc-be64e5efeedc.png">
 
 ## 기능 설명
 
 #### 회원가입/로그인   
 - Spring Security 와 JWT 사용
-
-#### 프로필 사진 등록
-- AWS S3 사용
+- 예외 처리 
+- Validation 
 
 #### 음반 리스트 구축
 - MySQL과 JPA를 사용하여 음반 정보 CRUD 기능 제공
 
 #### 댓글/좋아요 표시 
 - 개인이 음반에 대해 좋아요 표시와 댓글을 남길 수 있음
+
+#### 프로필 사진 등록
+- CompletableFuture 로 비동기 처리   
+- AWS S3 사용
+
+#### 알림 기능
+- Event Bus, Apache Kafka 를 사용하여, 회원 가입시 Push 알림 
+<img width="700" alt="아키텍쳐" src="https://user-images.githubusercontent.com/26567880/97253155-13498380-184f-11eb-8a31-a30dfe4f117b.png">
 
 #### 음반 간편 입력 기능 
 - Jsoup 크롤링을 사용하여, 바코드 번호만 입력하면 음반 정보가 자동으로 음반 리스트에 들어올 수 있도록 함 
